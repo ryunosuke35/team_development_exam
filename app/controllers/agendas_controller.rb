@@ -25,9 +25,9 @@ class AgendasController < ApplicationController
 
   def destroy
     @team = Team.find(@agenda.team_id)
-    binding.irb
     if current_user.id ==  @agenda.user_id || current_user.id == @team.owner_id
       @agenda.destroy
+      AgendaMailer.agenda_mail(@agenda).deliver
       redirect_to dashboard_url, notice: 'アジェンダを削除しました'
     else
       redirect_to dashboard_url, notice: '権限がありません'
